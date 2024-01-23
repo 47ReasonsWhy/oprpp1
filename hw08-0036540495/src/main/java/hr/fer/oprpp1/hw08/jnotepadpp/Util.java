@@ -11,6 +11,7 @@ import java.io.InputStream;
  * @author Marko Šelendić
  */
 public class Util {
+
     /**
      * Loads an image icon from the given path.
      *

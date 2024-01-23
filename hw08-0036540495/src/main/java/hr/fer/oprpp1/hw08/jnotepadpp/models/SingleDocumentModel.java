@@ -14,6 +14,7 @@ import java.nio.file.Path;
  * @author Marko Šelendić
  */
 public interface SingleDocumentModel {
+
     /**
      * @return text component used for editing the document
      */

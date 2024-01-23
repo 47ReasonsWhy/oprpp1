@@ -17,6 +17,7 @@ import java.util.List;
  * @author Marko Šelendić
  */
 public class DefaultSingleDocumentModel implements SingleDocumentModel {
+
     /**
      * Path to the document
      */

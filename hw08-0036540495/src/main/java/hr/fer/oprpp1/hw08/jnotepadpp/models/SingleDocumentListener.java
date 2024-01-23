@@ -10,6 +10,7 @@ package hr.fer.oprpp1.hw08.jnotepadpp.models;
  * </ul>
  */
 public interface SingleDocumentListener {
+
     /**
      * Method called when the modification status of the document is updated.
      *

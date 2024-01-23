@@ -1,6 +1,7 @@
 package hr.fer.oprpp1.hw08.jnotepadpp.models;
 
 import hr.fer.oprpp1.hw08.jnotepadpp.Util;
+import hr.fer.oprpp1.hw08.jnotepadpp.local.ILocalizationProvider;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.util.List;
  * @author Marko Šelendić
  */
 public class DefaultMultipleDocumentModel extends JTabbedPane implements MultipleDocumentModel {
+
     /**
      * List of documents.
      */
@@ -41,6 +43,11 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
     private final List<MultipleDocumentListener> listeners;
 
     /**
+     * Localization provider.
+     */
+    private final ILocalizationProvider localizationProvider;
+
+    /**
      * Icon used for unsaved documents.
      */
     private final ImageIcon unsavedIcon;
@@ -55,11 +62,19 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
      * Loads the icons used for saved and unsaved document
      * and adds a listener for keeping track of current document.
      */
-    public DefaultMultipleDocumentModel() {
+    public DefaultMultipleDocumentModel(ILocalizationProvider localizationProvider) {
         super();
         documents = new ArrayList<>();
         currentDocumentIndex = -1;
         listeners = new ArrayList<>();
+
+        this.localizationProvider = localizationProvider;
+        localizationProvider.addLocalizationListener(() -> documents.forEach(document -> {
+            int index = documents.indexOf(document);
+            String unnamed = localizationProvider.getString("unnamed");
+            setTitleAt(index, document.getFilePath() == null ? unnamed : document.getFilePath().getFileName().toString());
+            setToolTipTextAt(index, document.getFilePath() == null ? unnamed : document.getFilePath().toString());
+        }));
 
         unsavedIcon = Util.loadImageIcon("icons/Stop16.gif");
         savedIcon = Util.loadImageIcon("icons/Save16.gif");
@@ -92,7 +107,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         newDocument.setModified(true);
         addSingleDocumentListener(newDocument);
 
-        addTab("(unnamed)", unsavedIcon, new JScrollPane(newDocument.getTextComponent()), "(unnamed)");
+        addTab(localizationProvider.getString("unnamed"), unsavedIcon, new JScrollPane(newDocument.getTextComponent()), "(unnamed)");
         setSelectedIndex(documents.size() - 1);
 
         listeners.forEach(l -> {
@@ -236,7 +251,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
      *
      * @param model model to which the listener is added
      */
-    private void addSingleDocumentListener(SingleDocumentModel model) {
+    private void addSingleDocumentListener(DefaultSingleDocumentModel model) {
         model.addSingleDocumentListener(new SingleDocumentListener() {
             @Override
             public void documentModifyStatusUpdated(SingleDocumentModel model) {

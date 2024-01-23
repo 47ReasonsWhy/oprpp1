@@ -16,6 +16,7 @@ package hr.fer.oprpp1.hw08.jnotepadpp.models;
  * @author Marko Šelendić
  */
 public interface MultipleDocumentListener {
+
     /**
      * Method called when another document is set as current.
      *

@@ -13,6 +13,7 @@ import java.nio.file.Path;
  * @author Marko Šelendić
  */
 public interface MultipleDocumentModel extends Iterable<SingleDocumentModel> {
+
     /**
      * Returns the graphical component responsible for displaying the entire user interface of the model
      *
